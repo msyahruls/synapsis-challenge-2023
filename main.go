@@ -25,13 +25,17 @@ func main() {
 	logService := service.NewLogService(logRepository)
 	logController := controller.NewLogController(logService)
 
-	productRepository := repository.NewProductRepository(db)
-	productService := service.NewProductService(productRepository, validate)
-	productController := controller.NewProductController(productService, logService)
-
 	authRepository := repository.NewAuthRepository(db)
 	authService := service.NewAuthService(authRepository, validate)
 	authController := controller.NewAuthController(authService, logService)
+
+	categoryRepository := repository.NewCategoryRepository(db)
+	categoryService := service.NewCategoryService(categoryRepository, validate)
+	categoryController := controller.NewCategoryController(categoryService, logService)
+
+	productRepository := repository.NewProductRepository(db)
+	productService := service.NewProductService(productRepository, validate)
+	productController := controller.NewProductController(productService, logService)
 
 	app := fiber.New(config.NewFiberConfig())
 	app.Use(recover.New())
@@ -44,6 +48,7 @@ func main() {
 
 	authController.NewAuthRouter(app)
 	logController.NewLogRouter(app)
+	categoryController.NewCategoryRouter(app)
 	productController.NewProductRouter(app)
 
 	host := fmt.Sprintf("%s:%s", os.Getenv("SERVER_URI"), os.Getenv("SERVER_PORT"))

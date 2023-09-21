@@ -1502,18 +1502,34 @@ func ToUserResponse(user domain.User) web.UserResponse {
 // 	return issuesResponse
 // }
 
-// Product
-func ToProductResponse(permission domain.Product) web.ProductResponse {
-	return web.ProductResponse{
-		ID:   permission.ID,
-		Name: permission.Name,
+// Category
+func ToCategoryResponse(category domain.Category) web.CategoryResponse {
+	return web.CategoryResponse{
+		ID:   category.ID,
+		Name: category.Name,
 	}
 }
 
-func ToProductResponses(permissions []domain.Product) []web.ProductResponse {
-	var permissionsResponse []web.ProductResponse
-	for _, permission := range permissions {
-		permissionsResponse = append(permissionsResponse, ToProductResponse(permission))
+func ToCategoryResponses(categories []domain.Category) []web.CategoryResponse {
+	var categoriesResponse []web.CategoryResponse
+	for _, category := range categories {
+		categoriesResponse = append(categoriesResponse, ToCategoryResponse(category))
 	}
-	return permissionsResponse
+	return categoriesResponse
+}
+
+// Product
+func ToProductResponse(product domain.Product) web.ProductResponse {
+	return web.ProductResponse{
+		ID:   product.ID,
+		Name: product.Name,
+	}
+}
+
+func ToProductResponses(products []domain.Product) []web.ProductResponse {
+	var productsResponse []web.ProductResponse
+	for _, product := range products {
+		productsResponse = append(productsResponse, ToProductResponse(product))
+	}
+	return productsResponse
 }

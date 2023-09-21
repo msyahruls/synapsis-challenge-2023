@@ -438,6 +438,32 @@ import (
 // 	return query
 // }
 
+// Category
+func QueryCategory(issueId string, name string) primitive.M {
+	query := bson.M{}
+
+	if issueId != "" {
+		query["_id"] = primitive.Regex{Pattern: issueId, Options: "i"}
+	}
+
+	if name != "" {
+		query["name"] = primitive.Regex{Pattern: name, Options: "i"}
+	}
+
+	return query
+}
+
+// Category Exist
+func QueryCategoryExist(name string) primitive.M {
+	query := bson.M{
+		"$or": []interface{}{
+			bson.M{"name": name},
+		},
+	}
+
+	return query
+}
+
 // Product
 func QueryProduct(issueId string, name string) primitive.M {
 	query := bson.M{}
