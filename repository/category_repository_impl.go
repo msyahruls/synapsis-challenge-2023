@@ -17,6 +17,7 @@ type CategoryRepository interface {
 	Create(category domain.Category)
 	FindById(categoryId string) (domain.Category, error)
 	FindAll(name string) []domain.Category
+	FindIsExist(id string, name string) bool
 	Update(category domain.Category, categoryId string)
 	Delete(categoryId string) error
 }
@@ -72,11 +73,11 @@ func (repository *CategoryRepositoryImpl) FindAll(name string) []domain.Category
 	return categories
 }
 
-func (repository *CategoryRepositoryImpl) FindIsExist(name string) bool {
+func (repository *CategoryRepositoryImpl) FindIsExist(id string, name string) bool {
 	ctx, cancel := config.NewDBContext()
 	defer cancel()
 
-	query := helper.QueryCategoryExist(name)
+	query := helper.QueryCategoryExist(id, name)
 
 	cursor, err := repository.Collection.Find(ctx, query)
 	helper.PanicIfError(err)

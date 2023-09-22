@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"synapsis-challange/middleware"
 	"synapsis-challange/model/web"
 	"synapsis-challange/service"
 
@@ -36,9 +35,9 @@ func (controller *LogControllerImpl) NewLogRouter(app *fiber.App) {
 }
 
 func (controller *LogControllerImpl) FindAll(ctx *fiber.Ctx) error {
-	if isadmin := middleware.IsAdmin(ctx); !isadmin {
-		return UnauthorizeReturn(ctx, "unathorize")
-	}
+	// if isadmin := middleware.IsAdmin(ctx); !isadmin {
+	// 	return UnauthorizeReturn(ctx, "unathorize")
+	// }
 
 	page := ctx.Query("page")
 	limit := ctx.Query("limit")

@@ -1,9 +1,9 @@
 package web
 
-type ProductCreateRequest struct {
+type CategoryCreateRequest struct {
 	Name string `json:"name" validate:"required"`
 }
 
-type ProductUpdateRequest struct {
+type CategoryUpdateRequest struct {
 	Name string `json:"name" validate:"required"`
 }

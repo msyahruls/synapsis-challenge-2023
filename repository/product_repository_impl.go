@@ -16,7 +16,7 @@ type ProductRepositoryImpl struct {
 type ProductRepository interface {
 	Create(product domain.Product)
 	FindById(productId string) (domain.Product, error)
-	FindAll(name string) []domain.Product
+	FindAll(name string, category string) []domain.Product
 	Update(product domain.Product, productId string)
 	Delete(productId string) error
 }
@@ -32,8 +32,11 @@ func (repository *ProductRepositoryImpl) Create(product domain.Product) {
 	defer cancel()
 
 	_, err := repository.Collection.InsertOne(ctx, bson.M{
-		"_id":  product.ID,
-		"name": product.Name,
+		"_id":         product.ID,
+		"category_id": product.CategoryID,
+		"name":        product.Name,
+		"qty":         product.Qty,
+		"price":       product.Price,
 	})
 
 	helper.PanicIfError(err)
@@ -52,11 +55,11 @@ func (repository *ProductRepositoryImpl) FindById(productId string) (domain.Prod
 	return product, result.Err()
 }
 
-func (repository *ProductRepositoryImpl) FindAll(name string) []domain.Product {
+func (repository *ProductRepositoryImpl) FindAll(name string, category string) []domain.Product {
 	ctx, cancel := config.NewDBContext()
 	defer cancel()
 
-	query := helper.QueryProduct("", name)
+	query := helper.QueryProduct("", name, category)
 
 	cursor, err := repository.Collection.Find(ctx, query)
 	helper.PanicIfError(err)
@@ -95,9 +98,10 @@ func (repository *ProductRepositoryImpl) Update(product domain.Product, productI
 	query := bson.M{"_id": productId}
 	update := bson.M{
 		"$set": bson.M{
-			"name": product.Name,
-			// "value": product.Value,
-			// "permissions": product.Permission,
+			"category_id": product.CategoryID,
+			"name":        product.Name,
+			"qty":         product.Qty,
+			"price":       product.Price,
 		},
 	}
 

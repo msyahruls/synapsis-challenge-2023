@@ -30,42 +30,42 @@ func IsAuthenticated(c *fiber.Ctx) error {
 	return c.Next()
 }
 
-func IsAdmin(c *fiber.Ctx) bool {
-	cookie := c.Cookies("token")
+// func IsAdmin(c *fiber.Ctx) bool {
+// 	cookie := c.Cookies("token")
 
-	if _, level, err := helper.ParseJwt(cookie); err != nil || level != "1" {
-		return false
-	}
+// 	if _, level, err := helper.ParseJwt(cookie); err != nil || level != "1" {
+// 		return false
+// 	}
 
-	return true
-}
+// 	return true
+// }
 
-func IsCoordinator(c *fiber.Ctx) bool {
-	cookie := c.Cookies("token")
+// func IsCoordinator(c *fiber.Ctx) bool {
+// 	cookie := c.Cookies("token")
 
-	if _, level, err := helper.ParseJwt(cookie); err != nil || level != "2" {
-		return false
-	}
+// 	if _, level, err := helper.ParseJwt(cookie); err != nil || level != "2" {
+// 		return false
+// 	}
 
-	return true
-}
+// 	return true
+// }
 
-func IsRelawan(c *fiber.Ctx) bool {
-	cookie := c.Cookies("token")
+// func IsRelawan(c *fiber.Ctx) bool {
+// 	cookie := c.Cookies("token")
 
-	if _, level, err := helper.ParseJwt(cookie); err != nil || level != "3" {
-		return false
-	}
+// 	if _, level, err := helper.ParseJwt(cookie); err != nil || level != "3" {
+// 		return false
+// 	}
 
-	return true
-}
+// 	return true
+// }
 
-func IsSameUserId(c *fiber.Ctx, userId string) bool {
-	cookie := c.Cookies("token")
+// func IsSameUserId(c *fiber.Ctx, userId string) bool {
+// 	cookie := c.Cookies("token")
 
-	if user, _, err := helper.ParseJwt(cookie); err != nil || user != userId {
-		return false
-	}
+// 	if user, _, err := helper.ParseJwt(cookie); err != nil || user != userId {
+// 		return false
+// 	}
 
-	return true
-}
+// 	return true
+// }

@@ -1,9 +1,15 @@
 package web
 
-type CategoryCreateRequest struct {
-	Name string `json:"name" validate:"required"`
+type ProductCreateRequest struct {
+	CategoryID string `json:"category" validate:"required"`
+	Name       string `json:"name" validate:"required"`
+	Qty        int    `json:"qty" validate:"required"`
+	Price      int    `json:"price" validate:"required"`
 }
 
-type CategoryUpdateRequest struct {
-	Name string `json:"name" validate:"required"`
+type ProductUpdateRequest struct {
+	CategoryID string `json:"category" validate:"required"`
+	Name       string `json:"name" validate:"required"`
+	Qty        int    `json:"qty" validate:"required"`
+	Price      int    `json:"price" validate:"required"`
 }

@@ -16,14 +16,15 @@ import (
 )
 
 type ProductServiceImpl struct {
-	ProductRepository repository.ProductRepository
-	Validate          *validator.Validate
+	ProductRepository  repository.ProductRepository
+	CategoryRepository repository.CategoryRepository
+	Validate           *validator.Validate
 }
 
 type ProductService interface {
 	Create(request web.ProductCreateRequest) web.ProductResponse
 	FindById(productId string) web.ProductResponse
-	FindAll(name string) []web.ProductResponse
+	FindAll(name string, category string) []web.ProductResponse
 	Update(productId string, request web.ProductUpdateRequest) web.ProductResponse
 	// AssignPermission(productId string, request web.ProductUpdateRequest) web.ProductResponse
 	Delete(productId string)
@@ -40,14 +41,22 @@ func (service *ProductServiceImpl) Create(request web.ProductCreateRequest) web.
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
+	// isCategoryExist := service.CategoryRepository.FindIsExist(request.CategoryID, "")
+	// if !isCategoryExist {
+	// 	panic(exception.NewError(fiber.StatusBadRequest, "Category not exists"))
+	// }
+
 	// isProductExist := service.ProductRepository.FindIsExist(request.Name)
 	// if isProductExist {
 	// 	panic(exception.NewError(fiber.StatusBadRequest, "Product already exists"))
 	// }
 
 	product := domain.Product{
-		ID:   strings.ToLower(randstr.String(10)),
-		Name: request.Name,
+		ID:         strings.ToLower(randstr.String(10)),
+		CategoryID: request.CategoryID,
+		Name:       request.Name,
+		Qty:        request.Qty,
+		Price:      request.Price,
 	}
 
 	service.ProductRepository.Create(product)
@@ -64,8 +73,8 @@ func (service *ProductServiceImpl) FindById(productId string) web.ProductRespons
 	return helper.ToProductResponse(product)
 }
 
-func (service *ProductServiceImpl) FindAll(name string) []web.ProductResponse {
-	products := service.ProductRepository.FindAll(name)
+func (service *ProductServiceImpl) FindAll(name string, category string) []web.ProductResponse {
+	products := service.ProductRepository.FindAll(name, category)
 	return helper.ToProductResponses(products)
 }
 
@@ -83,7 +92,10 @@ func (service *ProductServiceImpl) Update(productId string, request web.ProductU
 		panic(exception.NewError(fiber.StatusNotFound, "Product not found"))
 	}
 
+	product.CategoryID = request.CategoryID
 	product.Name = request.Name
+	product.Qty = request.Qty
+	product.Price = request.Price
 
 	service.ProductRepository.Update(product, productId)
 

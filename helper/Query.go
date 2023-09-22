@@ -454,9 +454,10 @@ func QueryCategory(issueId string, name string) primitive.M {
 }
 
 // Category Exist
-func QueryCategoryExist(name string) primitive.M {
+func QueryCategoryExist(id string, name string) primitive.M {
 	query := bson.M{
 		"$or": []interface{}{
+			bson.M{"_id": id},
 			bson.M{"name": name},
 		},
 	}
@@ -465,7 +466,7 @@ func QueryCategoryExist(name string) primitive.M {
 }
 
 // Product
-func QueryProduct(issueId string, name string) primitive.M {
+func QueryProduct(issueId string, name string, category string) primitive.M {
 	query := bson.M{}
 
 	if issueId != "" {
@@ -476,6 +477,10 @@ func QueryProduct(issueId string, name string) primitive.M {
 		query["name"] = primitive.Regex{Pattern: name, Options: "i"}
 	}
 
+	if category != "" {
+		query["category_id"] = primitive.Regex{Pattern: category, Options: "i"}
+	}
+
 	return query
 }
 
@@ -484,6 +489,41 @@ func QueryProductExist(name string) primitive.M {
 	query := bson.M{
 		"$or": []interface{}{
 			bson.M{"name": name},
+		},
+	}
+
+	return query
+}
+
+// Cart
+func QueryCart(UserID string, ProductID string) primitive.M {
+	query := bson.M{}
+
+	if UserID != "" {
+		query["user_id"] = primitive.Regex{Pattern: UserID, Options: "i"}
+	}
+
+	if ProductID != "" {
+		query["product_id"] = primitive.Regex{Pattern: ProductID, Options: "i"}
+	}
+
+	return query
+}
+
+// Cart Exist
+func QueryCartExist(UserID string, ProductID string) primitive.M {
+	// query := bson.M{
+	// 	"$or": []interface{}{
+	// 		bson.M{"_id": id},
+	// 		bson.M{"user_id": UserID},
+	// 		bson.M{"prodcut_id": ProductID},
+	// 	},
+	// }
+
+	query := bson.M{
+		"$and": []interface{}{
+			bson.M{"user_id": UserID},
+			bson.M{"prodcut_id": ProductID},
 		},
 	}
 

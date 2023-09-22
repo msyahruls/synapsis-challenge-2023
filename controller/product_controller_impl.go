@@ -55,6 +55,15 @@ func (controller *ProductControllerImpl) Create(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)
 
+	// request.CategoryID = ctx.FormValue("category_id")
+	// request.Name = ctx.FormValue("name")
+	// qty, _ := strconv.Atoi(ctx.FormValue("qty"))
+	// request.Qty = qty
+	// price, _ := strconv.Atoi(ctx.FormValue("price"))
+	// request.Price = price
+
+	fmt.Println(request)
+
 	productResponse := controller.ProductService.Create(request)
 
 	action := fmt.Sprintf("create product %s", productResponse.Name)
@@ -83,7 +92,8 @@ func (controller *ProductControllerImpl) FindById(ctx *fiber.Ctx) error {
 
 func (controller *ProductControllerImpl) FindAll(ctx *fiber.Ctx) error {
 	name := ctx.Query("name")
-	productResponse := controller.ProductService.FindAll(name)
+	category := ctx.Query("category")
+	productResponse := controller.ProductService.FindAll(name, category)
 	return ctx.Status(fiber.StatusOK).JSON(web.WebResponse{
 		Code:    fiber.StatusOK,
 		Status:  true,
