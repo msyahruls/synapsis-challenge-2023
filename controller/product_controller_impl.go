@@ -62,8 +62,6 @@ func (controller *ProductControllerImpl) Create(ctx *fiber.Ctx) error {
 	// price, _ := strconv.Atoi(ctx.FormValue("price"))
 	// request.Price = price
 
-	fmt.Println(request)
-
 	productResponse := controller.ProductService.Create(request)
 
 	action := fmt.Sprintf("create product %s", productResponse.Name)

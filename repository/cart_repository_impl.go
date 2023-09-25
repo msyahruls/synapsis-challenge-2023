@@ -16,10 +16,12 @@ type CartRepositoryImpl struct {
 type CartRepository interface {
 	Create(cart domain.Cart)
 	FindById(cartId string) (domain.Cart, error)
+	FindByUserId(userId string) (domain.Cart, error)
 	FindAll(UserID string, ProductID string) []domain.Cart
 	FindIsExist(UserID string, ProductID string) bool
 	Update(cart domain.Cart, cartId string)
 	Delete(cartId string) error
+	DeleteByUserId(userId string) error
 }
 
 func NewCartRepository(database *mongo.Database) CartRepository {
@@ -48,7 +50,20 @@ func (repository *CartRepositoryImpl) FindById(cartId string) (domain.Cart, erro
 	defer cancel()
 
 	var cart domain.Cart
-	query := bson.M{"_id": cartId}
+	query := bson.M{"user_id": cartId}
+
+	result := repository.Collection.FindOne(ctx, query)
+	result.Decode(&cart)
+
+	return cart, result.Err()
+}
+
+func (repository *CartRepositoryImpl) FindByUserId(userId string) (domain.Cart, error) {
+	ctx, cancel := config.NewDBContext()
+	defer cancel()
+
+	var cart domain.Cart
+	query := bson.M{"user_id": userId}
 
 	result := repository.Collection.FindOne(ctx, query)
 	result.Decode(&cart)
@@ -111,30 +126,25 @@ func (repository *CartRepositoryImpl) Update(cart domain.Cart, cartId string) {
 	helper.PanicIfError(err)
 }
 
-func (repository *CartRepositoryImpl) AssignPermission(cart domain.Cart, cartId string) {
-	ctx, cancel := config.NewDBContext()
-	defer cancel()
-
-	query := bson.M{"_id": cartId}
-	update := bson.M{
-		"$set": bson.M{
-			// "name":       cart.Label,
-			// "value":       cart.Value,
-			// "permissions": cart.Permission,
-		},
-	}
-
-	_, err := repository.Collection.UpdateOne(ctx, query, update)
-
-	helper.PanicIfError(err)
-}
-
 func (repository *CartRepositoryImpl) Delete(cartId string) error {
 	ctx, cancel := config.NewDBContext()
 	defer cancel()
 
 	_, err := repository.Collection.DeleteOne(ctx, bson.M{
 		"_id": cartId,
+	})
+
+	helper.PanicIfError(err)
+
+	return nil
+}
+
+func (repository *CartRepositoryImpl) DeleteByUserId(userId string) error {
+	ctx, cancel := config.NewDBContext()
+	defer cancel()
+
+	_, err := repository.Collection.DeleteMany(ctx, bson.M{
+		"user_id": userId,
 	})
 
 	helper.PanicIfError(err)

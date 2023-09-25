@@ -77,13 +77,12 @@ func (controller *TransactionControllerImpl) Create(ctx *fiber.Ctx) error {
 	request.SumTotal = sumTotal
 	request.Payback = request.Payment - sumTotal
 
-	fmt.Println(request)
-
 	transactionResponse := controller.TransactionService.Create(request, actor)
 
 	action := fmt.Sprintf("add %s to transaction", transactionResponse.UserID)
 	// actor, _, _ := helper.ParseJwt(ctx.Cookies("token"))
 	controller.LogService.Create(actor, action)
+	controller.CartService.DeleteByUserId(actor)
 
 	return ctx.Status(fiber.StatusOK).JSON(web.WebResponse{
 		Code:    fiber.StatusOK,
@@ -116,52 +115,3 @@ func (controller *TransactionControllerImpl) FindAll(ctx *fiber.Ctx) error {
 		Data:    transactionResponse,
 	})
 }
-
-// func (controller *TransactionControllerImpl) Update(ctx *fiber.Ctx) error {
-// 	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-// 	// 	return UnauthorizeReturn(ctx, "only admin can update transaction")
-// 	// }
-
-// 	var request web.TransactionUpdateRequest
-// 	err := ctx.BodyParser(&request)
-// 	helper.PanicIfError(err)
-// 	actor, _, _ := helper.ParseJwt(ctx.Cookies("token"))
-
-// 	request.UserID = actor
-
-// 	transactionId := ctx.Params("transactionId")
-
-// 	transactionResponse := controller.TransactionService.Update(transactionId, request)
-
-// 	action := fmt.Sprintf("update %s from transaction", transactionResponse.ProductID)
-// 	// actor, _, _ := helper.ParseJwt(ctx.Cookies("token"))
-// 	controller.LogService.Create(actor, action)
-
-// 	return ctx.Status(fiber.StatusOK).JSON(web.WebResponse{
-// 		Code:    fiber.StatusOK,
-// 		Status:  true,
-// 		Message: "success",
-// 		Data:    transactionResponse,
-// 	})
-// }
-
-// func (controller *TransactionControllerImpl) Delete(ctx *fiber.Ctx) error {
-// 	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-// 	// 	return UnauthorizeReturn(ctx, "only admin can delete transaction")
-// 	// }
-
-// 	transactionId := ctx.Params("transactionId")
-
-// 	controller.TransactionService.Delete(transactionId)
-
-// 	action := fmt.Sprintf("delete list transaction %s", transactionId)
-// 	actor, _, _ := helper.ParseJwt(ctx.Cookies("token"))
-// 	controller.LogService.Create(actor, action)
-
-// 	return ctx.Status(fiber.StatusOK).JSON(web.WebResponse{
-// 		Code:    fiber.StatusOK,
-// 		Status:  true,
-// 		Message: "success",
-// 		Data:    nil,
-// 	})
-// }

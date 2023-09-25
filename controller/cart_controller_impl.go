@@ -54,13 +54,9 @@ func (controller *CartControllerImpl) Create(ctx *fiber.Ctx) error {
 	var request web.CartCreateRequest
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)
-	// fmt.Println(request)
 
 	actor, _, _ := helper.ParseJwt(ctx.Cookies("token"))
-
 	request.UserID = actor
-
-	fmt.Println(request)
 
 	cartResponse := controller.CartService.Create(request, actor)
 

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -19,21 +18,25 @@ import (
 type CartServiceImpl struct {
 	CartRepository     repository.CartRepository
 	CategoryRepository repository.CategoryRepository
+	ProductRepository  repository.ProductRepository
 	Validate           *validator.Validate
 }
 
 type CartService interface {
 	Create(request web.CartCreateRequest, actor string) web.CartResponse
 	FindById(cartId string) web.CartResponse
+	FindByUserId(userId string) web.CartResponse
 	FindAll(UserID string, ProductID string) []web.CartResponse
 	Update(cartId string, request web.CartUpdateRequest) web.CartResponse
 	Delete(cartId string)
+	DeleteByUserId(userId string)
 }
 
-func NewCartService(cartRepository repository.CartRepository, validate *validator.Validate) CartService {
+func NewCartService(cartRepository repository.CartRepository, productRepository repository.ProductRepository, validate *validator.Validate) CartService {
 	return &CartServiceImpl{
-		CartRepository: cartRepository,
-		Validate:       validate,
+		CartRepository:    cartRepository,
+		ProductRepository: productRepository,
+		Validate:          validate,
 	}
 }
 
@@ -51,12 +54,15 @@ func (service *CartServiceImpl) Create(request web.CartCreateRequest, actor stri
 		panic(exception.NewError(fiber.StatusBadRequest, "Product already exists in Cart"))
 	}
 
+	product, _ := service.ProductRepository.FindById(request.ProductID)
+	total := request.Qty * product.Price
+
 	cart := domain.Cart{
 		ID:        strings.ToLower(randstr.String(10)),
 		UserID:    request.UserID,
 		ProductID: request.ProductID,
 		Qty:       request.Qty,
-		Total:     0,
+		Total:     total,
 	}
 
 	service.CartRepository.Create(cart)
@@ -73,8 +79,16 @@ func (service *CartServiceImpl) FindById(cartId string) web.CartResponse {
 	return helper.ToCartResponse(cart)
 }
 
+func (service *CartServiceImpl) FindByUserId(cartId string) web.CartResponse {
+	cart, err := service.CartRepository.FindById(cartId)
+	if err != nil {
+		panic(exception.NewError(fiber.StatusNotFound, "Cart not found"))
+	}
+
+	return helper.ToCartResponse(cart)
+}
+
 func (service *CartServiceImpl) FindAll(UserID string, ProductID string) []web.CartResponse {
-	fmt.Println(UserID)
 	carts := service.CartRepository.FindAll(UserID, ProductID)
 	return helper.ToCartResponses(carts)
 }
@@ -103,19 +117,6 @@ func (service *CartServiceImpl) Update(cartId string, request web.CartUpdateRequ
 	return helper.ToCartResponse(cart)
 }
 
-// func (service *CartServiceImpl) AssignPermission(cartId string, request web.CartUpdateRequest) web.CartResponse {
-// 	cart, err := service.CartRepository.FindById(cartId)
-// 	if err != nil {
-// 		panic(exception.NewError(fiber.StatusNotFound, "Cart not found"))
-// 	}
-
-// 	cart.Permission = request.Permission
-
-// 	service.CartRepository.AssignPermission(cart, cartId)
-
-// 	return helper.ToCartResponse(cart)
-// }
-
 func (service *CartServiceImpl) Delete(cartId string) {
 	cart, err := service.CartRepository.FindById(cartId)
 	if err != nil {
@@ -123,6 +124,17 @@ func (service *CartServiceImpl) Delete(cartId string) {
 	}
 
 	err = service.CartRepository.Delete(cartId)
+	helper.PanicIfError(err)
+	log.Println("LOG ", "deleted cart", cart.ID)
+}
+
+func (service *CartServiceImpl) DeleteByUserId(userId string) {
+	cart, err := service.CartRepository.FindByUserId(userId)
+	if err != nil {
+		panic(exception.NewError(fiber.StatusNotFound, "Cart not found"))
+	}
+
+	err = service.CartRepository.DeleteByUserId(userId)
 	helper.PanicIfError(err)
 	log.Println("LOG ", "deleted cart", cart.ID)
 }

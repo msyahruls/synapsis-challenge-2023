@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"strings"
 
 	"synapsis-challange/exception"
@@ -40,22 +39,6 @@ func (service *TransactionServiceImpl) Create(request web.TransactionCreateReque
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	// isCategoryExist := service.CategoryRepository.FindIsExist(actor, "")
-	// if !isCategoryExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Category not exists"))
-	// }
-
-	// isTransactionExist := service.TransactionRepository.FindIsExist(request.UserID, request.ProductID)
-	// if isTransactionExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Product already exists in Transaction"))
-	// }
-
-	// detail := []domain.TransactionDetails{
-	// 	ProductID: request.ProductID,
-	// 	Qty:       request.Qty,
-	// 	Total:     0,
-	// }
-
 	transaction := domain.Transaction{
 		ID:                 strings.ToLower(randstr.String(10)),
 		UserID:             request.UserID,
@@ -64,8 +47,6 @@ func (service *TransactionServiceImpl) Create(request web.TransactionCreateReque
 		Payback:            request.Payback,
 		TransactionDetails: request.Transactions,
 	}
-
-	fmt.Println(transaction)
 
 	service.TransactionRepository.Create(transaction)
 
@@ -85,51 +66,3 @@ func (service *TransactionServiceImpl) FindAll(UserID string) []web.TransactionR
 	transactions := service.TransactionRepository.FindAll(UserID)
 	return helper.ToTransactionResponses(transactions)
 }
-
-// func (service *TransactionServiceImpl) Update(transactionId string, request web.TransactionUpdateRequest) web.TransactionResponse {
-// 	err := service.Validate.Struct(request)
-// 	helper.PanicIfError(err)
-
-// 	// isTransactionExist := service.TransactionRepository.FindIsExist(request.Label, request.Value)
-// 	// if isTransactionExist {
-// 	// 	panic(exception.NewError(fiber.StatusBadRequest, "Transaction already exists"))
-// 	// }
-
-// 	transaction, err := service.TransactionRepository.FindById(transactionId)
-// 	if err != nil {
-// 		panic(exception.NewError(fiber.StatusNotFound, "Transaction not found"))
-// 	}
-
-// 	// transaction.UserID = request.UserID
-// 	transaction.ProductID = request.ProductID
-// 	transaction.Qty = request.Qty
-// 	transaction.Total = 1
-
-// 	service.TransactionRepository.Update(transaction, transactionId)
-
-// 	return helper.ToTransactionResponse(transaction)
-// }
-
-// func (service *TransactionServiceImpl) AssignPermission(transactionId string, request web.TransactionUpdateRequest) web.TransactionResponse {
-// 	transaction, err := service.TransactionRepository.FindById(transactionId)
-// 	if err != nil {
-// 		panic(exception.NewError(fiber.StatusNotFound, "Transaction not found"))
-// 	}
-
-// 	transaction.Permission = request.Permission
-
-// 	service.TransactionRepository.AssignPermission(transaction, transactionId)
-
-// 	return helper.ToTransactionResponse(transaction)
-// }
-
-// func (service *TransactionServiceImpl) Delete(transactionId string) {
-// 	transaction, err := service.TransactionRepository.FindById(transactionId)
-// 	if err != nil {
-// 		panic(exception.NewError(fiber.StatusNotFound, "Transaction not found"))
-// 	}
-
-// 	err = service.TransactionRepository.Delete(transactionId)
-// 	helper.PanicIfError(err)
-// 	log.Println("LOG ", "deleted transaction", transaction.ID)
-// }

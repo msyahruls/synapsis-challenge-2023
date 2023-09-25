@@ -38,7 +38,7 @@ func main() {
 	productController := controller.NewProductController(productService, logService)
 
 	cartRepository := repository.NewCartRepository(db)
-	cartService := service.NewCartService(cartRepository, validate)
+	cartService := service.NewCartService(cartRepository, productRepository, validate)
 	cartController := controller.NewCartController(cartService, logService)
 
 	transactionRepository := repository.NewTransactionRepository(db)
