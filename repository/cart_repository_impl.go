@@ -50,7 +50,7 @@ func (repository *CartRepositoryImpl) FindById(cartId string) (domain.Cart, erro
 	defer cancel()
 
 	var cart domain.Cart
-	query := bson.M{"user_id": cartId}
+	query := bson.M{"_id": cartId}
 
 	result := repository.Collection.FindOne(ctx, query)
 	result.Decode(&cart)

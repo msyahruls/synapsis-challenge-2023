@@ -8,8 +8,8 @@ type CartCreateRequest struct {
 }
 
 type CartUpdateRequest struct {
-	UserID    string `json:"user" validate:"required"`
-	ProductID string `json:"product" validate:"required"`
-	Qty       int    `json:"qty" validate:"required"`
+	UserID string `json:"user" validate:"required"`
+	Qty    int    `json:"qty" validate:"required"`
+	// ProductID string `json:"product" validate:"required"`
 	// Total     string `json:"total" validate:"required"`
 }

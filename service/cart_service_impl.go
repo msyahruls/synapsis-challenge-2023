@@ -107,10 +107,13 @@ func (service *CartServiceImpl) Update(cartId string, request web.CartUpdateRequ
 		panic(exception.NewError(fiber.StatusNotFound, "Cart not found"))
 	}
 
+	product, _ := service.ProductRepository.FindById(cart.ProductID)
+	total := request.Qty * product.Price
+
 	// cart.UserID = request.UserID
-	cart.ProductID = request.ProductID
+	// cart.ProductID = request.ProductID
 	cart.Qty = request.Qty
-	cart.Total = 1
+	cart.Total = total
 
 	service.CartRepository.Update(cart, cartId)
 
