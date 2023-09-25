@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -73,6 +74,7 @@ func (service *CartServiceImpl) FindById(cartId string) web.CartResponse {
 }
 
 func (service *CartServiceImpl) FindAll(UserID string, ProductID string) []web.CartResponse {
+	fmt.Println(UserID)
 	carts := service.CartRepository.FindAll(UserID, ProductID)
 	return helper.ToCartResponses(carts)
 }

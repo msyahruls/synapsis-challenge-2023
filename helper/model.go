@@ -1555,3 +1555,41 @@ func ToCartResponses(carts []domain.Cart) []web.CartResponse {
 	}
 	return cartsResponse
 }
+
+// Transaction
+func ToTransactionResponse(transaction domain.Transaction) web.TransactionResponse {
+	transactionDetails := ToTransactionDetailsResponses(transaction.TransactionDetails)
+	return web.TransactionResponse{
+		ID:                 transaction.ID,
+		UserID:             transaction.UserID,
+		Total:              transaction.SumTotal,
+		Payment:            transaction.Payment,
+		Payback:            transaction.Payback,
+		TransactionDetails: transactionDetails,
+	}
+}
+
+func ToTransactionResponses(transactions []domain.Transaction) []web.TransactionResponse {
+	var transactionsResponse []web.TransactionResponse
+	for _, transaction := range transactions {
+		transactionsResponse = append(transactionsResponse, ToTransactionResponse(transaction))
+	}
+	return transactionsResponse
+}
+
+// TransactionDetails
+func ToTransactionDetailsResponse(transactionDetail domain.TransactionDetails) web.TransactionDetailsResponse {
+	return web.TransactionDetailsResponse{
+		ProductID: transactionDetail.ProductID,
+		Qty:       transactionDetail.Qty,
+		Total:     transactionDetail.Total,
+	}
+}
+
+func ToTransactionDetailsResponses(transactionDetails []domain.TransactionDetails) []web.TransactionDetailsResponse {
+	var transactionDetailsResponse []web.TransactionDetailsResponse
+	for _, transactionDetail := range transactionDetails {
+		transactionDetailsResponse = append(transactionDetailsResponse, ToTransactionDetailsResponse(transactionDetail))
+	}
+	return transactionDetailsResponse
+}

@@ -512,18 +512,38 @@ func QueryCart(UserID string, ProductID string) primitive.M {
 
 // Cart Exist
 func QueryCartExist(UserID string, ProductID string) primitive.M {
-	// query := bson.M{
-	// 	"$or": []interface{}{
-	// 		bson.M{"_id": id},
-	// 		bson.M{"user_id": UserID},
-	// 		bson.M{"prodcut_id": ProductID},
-	// 	},
-	// }
-
 	query := bson.M{
 		"$and": []interface{}{
 			bson.M{"user_id": UserID},
 			bson.M{"prodcut_id": ProductID},
+		},
+	}
+
+	return query
+}
+
+// Transaction
+func QueryTransaction(UserID string) primitive.M {
+	query := bson.M{}
+
+	if UserID != "" {
+		query["user_id"] = primitive.Regex{Pattern: UserID, Options: "i"}
+	}
+
+	// if ProductID != "" {
+	// 	query["product_id"] = primitive.Regex{Pattern: ProductID, Options: "i"}
+	// }
+
+	return query
+}
+
+// Transaction Exist
+func QueryTransactionExist(UserID string) primitive.M {
+	query := bson.M{
+		"$and": []interface{}{
+			// bson.M{"user_id": ID},
+			bson.M{"user_id": UserID},
+			// bson.M{"prodcut_id": ProductID},
 		},
 	}
 

@@ -41,6 +41,10 @@ func main() {
 	cartService := service.NewCartService(cartRepository, validate)
 	cartController := controller.NewCartController(cartService, logService)
 
+	transactionRepository := repository.NewTransactionRepository(db)
+	transactionService := service.NewTransactionService(transactionRepository, validate)
+	transactionController := controller.NewTransactionController(transactionService, cartService, logService)
+
 	app := fiber.New(config.NewFiberConfig())
 	app.Use(recover.New())
 	app.Use(cors.New(cors.Config{
@@ -55,6 +59,7 @@ func main() {
 	categoryController.NewCategoryRouter(app)
 	productController.NewProductRouter(app)
 	cartController.NewCartRouter(app)
+	transactionController.NewTransactionRouter(app)
 
 	host := fmt.Sprintf("%s:%s", os.Getenv("SERVER_URI"), os.Getenv("SERVER_PORT"))
 	err := app.Listen(host)
