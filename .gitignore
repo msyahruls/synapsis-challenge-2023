@@ -22,3 +22,4 @@ go.work
 
 # Development directory (remove the comment below to include it)
 tmp
+.mongodata
