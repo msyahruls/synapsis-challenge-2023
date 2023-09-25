@@ -39,11 +39,6 @@ func (service *CategoryServiceImpl) Create(request web.CategoryCreateRequest) we
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	// isCategoryExist := service.CategoryRepository.FindIsExist(request.Name)
-	// if isCategoryExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Category already exists"))
-	// }
-
 	product := domain.Category{
 		ID:   strings.ToLower(randstr.String(10)),
 		Name: request.Name,
@@ -71,11 +66,6 @@ func (service *CategoryServiceImpl) FindAll(name string) []web.CategoryResponse 
 func (service *CategoryServiceImpl) Update(productId string, request web.CategoryUpdateRequest) web.CategoryResponse {
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
-
-	// isCategoryExist := service.CategoryRepository.FindIsExist(request.Label, request.Value)
-	// if isCategoryExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Category already exists"))
-	// }
 
 	product, err := service.CategoryRepository.FindById(productId)
 	if err != nil {

@@ -47,10 +47,6 @@ func (controller *CategoryControllerImpl) NewCategoryRouter(app *fiber.App) {
 }
 
 func (controller *CategoryControllerImpl) Create(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can create category")
-	// }
-
 	var request web.CategoryCreateRequest
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)
@@ -118,10 +114,6 @@ func (controller *CategoryControllerImpl) Update(ctx *fiber.Ctx) error {
 }
 
 func (controller *CategoryControllerImpl) Delete(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can delete category")
-	// }
-
 	categoryId := ctx.Params("categoryId")
 
 	controller.CategoryService.Delete(categoryId)

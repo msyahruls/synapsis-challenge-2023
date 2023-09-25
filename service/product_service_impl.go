@@ -26,7 +26,6 @@ type ProductService interface {
 	FindById(productId string) web.ProductResponse
 	FindAll(name string, category string) []web.ProductResponse
 	Update(productId string, request web.ProductUpdateRequest) web.ProductResponse
-	// AssignPermission(productId string, request web.ProductUpdateRequest) web.ProductResponse
 	Delete(productId string)
 }
 
@@ -40,16 +39,6 @@ func NewProductService(productRepository repository.ProductRepository, validate 
 func (service *ProductServiceImpl) Create(request web.ProductCreateRequest) web.ProductResponse {
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
-
-	// isCategoryExist := service.CategoryRepository.FindIsExist(request.CategoryID, "")
-	// if !isCategoryExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Category not exists"))
-	// }
-
-	// isProductExist := service.ProductRepository.FindIsExist(request.Name)
-	// if isProductExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Product already exists"))
-	// }
 
 	product := domain.Product{
 		ID:         strings.ToLower(randstr.String(10)),
@@ -82,11 +71,6 @@ func (service *ProductServiceImpl) Update(productId string, request web.ProductU
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	// isProductExist := service.ProductRepository.FindIsExist(request.Label, request.Value)
-	// if isProductExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Product already exists"))
-	// }
-
 	product, err := service.ProductRepository.FindById(productId)
 	if err != nil {
 		panic(exception.NewError(fiber.StatusNotFound, "Product not found"))
@@ -101,19 +85,6 @@ func (service *ProductServiceImpl) Update(productId string, request web.ProductU
 
 	return helper.ToProductResponse(product)
 }
-
-// func (service *ProductServiceImpl) AssignPermission(productId string, request web.ProductUpdateRequest) web.ProductResponse {
-// 	product, err := service.ProductRepository.FindById(productId)
-// 	if err != nil {
-// 		panic(exception.NewError(fiber.StatusNotFound, "Product not found"))
-// 	}
-
-// 	product.Permission = request.Permission
-
-// 	service.ProductRepository.AssignPermission(product, productId)
-
-// 	return helper.ToProductResponse(product)
-// }
 
 func (service *ProductServiceImpl) Delete(productId string) {
 	product, err := service.ProductRepository.FindById(productId)

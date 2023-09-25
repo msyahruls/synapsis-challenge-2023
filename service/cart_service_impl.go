@@ -44,11 +44,6 @@ func (service *CartServiceImpl) Create(request web.CartCreateRequest, actor stri
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	// isCategoryExist := service.CategoryRepository.FindIsExist(actor, "")
-	// if !isCategoryExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Category not exists"))
-	// }
-
 	isCartExist := service.CartRepository.FindIsExist(request.UserID, request.ProductID)
 	if isCartExist {
 		panic(exception.NewError(fiber.StatusBadRequest, "Product already exists in Cart"))
@@ -97,11 +92,6 @@ func (service *CartServiceImpl) Update(cartId string, request web.CartUpdateRequ
 	err := service.Validate.Struct(request)
 	helper.PanicIfError(err)
 
-	// isCartExist := service.CartRepository.FindIsExist(request.Label, request.Value)
-	// if isCartExist {
-	// 	panic(exception.NewError(fiber.StatusBadRequest, "Cart already exists"))
-	// }
-
 	cart, err := service.CartRepository.FindById(cartId)
 	if err != nil {
 		panic(exception.NewError(fiber.StatusNotFound, "Cart not found"))
@@ -109,9 +99,6 @@ func (service *CartServiceImpl) Update(cartId string, request web.CartUpdateRequ
 
 	product, _ := service.ProductRepository.FindById(cart.ProductID)
 	total := request.Qty * product.Price
-
-	// cart.UserID = request.UserID
-	// cart.ProductID = request.ProductID
 	cart.Qty = request.Qty
 	cart.Total = total
 

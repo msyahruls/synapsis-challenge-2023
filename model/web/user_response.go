@@ -8,16 +8,6 @@ type UserResponse struct {
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	// Gender       string `json:"gender"`
-	// Phone        string `json:"phone"`
-	// NIK          string `json:"nik"`
-	// DistrictId   string `json:"district_id"`
-	// Status       *bool  `json:"status"`
-	// Longitude    string `json:"longitude"`
-	// Latitude     string `json:"latitude"`
-	// ProfileImage string `json:"profile_image"`
-	// Occupation   OccupationResponseUser `json:"occupation"`
-	// Accesses  []string  `json:"accesses"`
 }
 
 type OccupationResponseUser struct {

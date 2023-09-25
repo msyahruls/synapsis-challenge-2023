@@ -24,8 +24,6 @@ type TransactionService interface {
 	Create(request web.TransactionCreateRequest, actor string) web.TransactionResponse
 	FindById(transactionId string) web.TransactionResponse
 	FindAll(UserID string) []web.TransactionResponse
-	// Update(transactionId string, request web.TransactionUpdateRequest) web.TransactionResponse
-	// Delete(transactionId string)
 }
 
 func NewTransactionService(transactionRepository repository.TransactionRepository, validate *validator.Validate) TransactionService {

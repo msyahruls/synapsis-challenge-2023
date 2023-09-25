@@ -43,16 +43,9 @@ func (controller *TransactionControllerImpl) NewTransactionRouter(app *fiber.App
 	transaction.Use(middlewares.IsAuthenticated)
 	transaction.Post("/checkout", controller.Create)
 	transaction.Get("/:transactionId", controller.FindById)
-	transaction.Get("/", controller.FindAll)
-	// transaction.Put("/:transactionId", controller.Update)
-	// transaction.Delete("/:transactionId", controller.Delete)
 }
 
 func (controller *TransactionControllerImpl) Create(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can create transaction")
-	// }
-
 	var request web.TransactionCreateRequest
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)

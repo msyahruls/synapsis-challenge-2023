@@ -35,10 +35,6 @@ func (controller *LogControllerImpl) NewLogRouter(app *fiber.App) {
 }
 
 func (controller *LogControllerImpl) FindAll(ctx *fiber.Ctx) error {
-	// if isadmin := middleware.IsAdmin(ctx); !isadmin {
-	// 	return UnauthorizeReturn(ctx, "unathorize")
-	// }
-
 	page := ctx.Query("page")
 	limit := ctx.Query("limit")
 

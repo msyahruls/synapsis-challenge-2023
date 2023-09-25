@@ -110,24 +110,6 @@ func (repository *ProductRepositoryImpl) Update(product domain.Product, productI
 	helper.PanicIfError(err)
 }
 
-func (repository *ProductRepositoryImpl) AssignPermission(product domain.Product, productId string) {
-	ctx, cancel := config.NewDBContext()
-	defer cancel()
-
-	query := bson.M{"_id": productId}
-	update := bson.M{
-		"$set": bson.M{
-			// "name":       product.Label,
-			// "value":       product.Value,
-			// "permissions": product.Permission,
-		},
-	}
-
-	_, err := repository.Collection.UpdateOne(ctx, query, update)
-
-	helper.PanicIfError(err)
-}
-
 func (repository *ProductRepositoryImpl) Delete(productId string) error {
 	ctx, cancel := config.NewDBContext()
 	defer cancel()

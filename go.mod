@@ -4,17 +4,9 @@ go 1.19
 
 require (
 	github.com/go-playground/validator v9.31.0+incompatible
-	// github.com/go-co-op/gocron v1.18.0
-	// github.com/go-playground/validator/v10 v10.11.1
-	// github.com/gofiber/fiber v1.14.6
 	github.com/gofiber/fiber/v2 v2.49.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.4.0
-	// github.com/minio/minio-go/v7 v7.0.47
-	// github.com/mitchellh/mapstructure v1.5.0
-	// github.com/tealeg/xlsx v1.0.5
-	// github.com/thanhpk/randstr v1.0.4
-	// github.com/xhit/go-simple-mail/v2 v2.13.0
 	go.mongodb.org/mongo-driver v1.12.1
 )
 

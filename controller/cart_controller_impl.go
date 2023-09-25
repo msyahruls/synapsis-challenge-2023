@@ -97,10 +97,6 @@ func (controller *CartControllerImpl) FindAll(ctx *fiber.Ctx) error {
 }
 
 func (controller *CartControllerImpl) Update(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can update cart")
-	// }
-
 	var request web.CartUpdateRequest
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)
@@ -125,10 +121,6 @@ func (controller *CartControllerImpl) Update(ctx *fiber.Ctx) error {
 }
 
 func (controller *CartControllerImpl) Delete(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can delete cart")
-	// }
-
 	cartId := ctx.Params("cartId")
 
 	controller.CartService.Delete(cartId)

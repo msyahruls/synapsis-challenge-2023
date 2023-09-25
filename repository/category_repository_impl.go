@@ -97,26 +97,6 @@ func (repository *CategoryRepositoryImpl) Update(category domain.Category, categ
 	update := bson.M{
 		"$set": bson.M{
 			"name": category.Name,
-			// "value": category.Value,
-			// "permissions": category.Permission,
-		},
-	}
-
-	_, err := repository.Collection.UpdateOne(ctx, query, update)
-
-	helper.PanicIfError(err)
-}
-
-func (repository *CategoryRepositoryImpl) AssignPermission(category domain.Category, categoryId string) {
-	ctx, cancel := config.NewDBContext()
-	defer cancel()
-
-	query := bson.M{"_id": categoryId}
-	update := bson.M{
-		"$set": bson.M{
-			// "name":       category.Label,
-			// "value":       category.Value,
-			// "permissions": category.Permission,
 		},
 	}
 

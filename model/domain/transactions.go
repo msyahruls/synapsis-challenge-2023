@@ -13,5 +13,4 @@ type TransactionDetails struct {
 	ProductID string `json:"product" bson:"product"`
 	Qty       int    `json:"qty" bson:"qty"`
 	Total     int    `json:"total" bson:"total"`
-	// TransactionID string `json:"transaction" bson:"transaction"`
 }

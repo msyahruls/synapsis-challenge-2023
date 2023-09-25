@@ -17,7 +17,6 @@ type AuthRepositoryImpl struct {
 
 type AuthRepository interface {
 	LoginEmail(email string) (domain.User, error)
-	// LoginPhone(email string) (domain.User, error)
 	Register(user domain.User)
 	FindByQuery(query, value string) (domain.User, error)
 
@@ -49,13 +48,6 @@ func (repository *AuthRepositoryImpl) Register(user domain.User) {
 		"password":   user.Password,
 		"created_at": user.CreatedAt,
 		"updated_at": user.UpdatedAt,
-		// "occupation_id": user.OccupationId,
-		// "nik":           user.NIK,
-		// "phone":         user.Phone,
-		// "gender":        user.Gender,
-		// "referral_code": user.ReferralCode,
-		// "longitude":     user.Longitude,
-		// "latitude":      user.Latitude,
 	})
 
 	helper.PanicIfError(err)
@@ -66,9 +58,6 @@ func (repository *AuthRepositoryImpl) LoginEmail(email string) (domain.User, err
 	defer cancel()
 
 	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "email", Value: email}}}}
-	// lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "occupations"}, {Key: "localField", Value: "occupation_id"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "occupation"}}}}
-	// unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$occupation"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
-	// result, err := repository.Collection.Aggregate(ctx, mongo.Pipeline{matchStage, lookupStage, unwindStage})
 	result, err := repository.Collection.Aggregate(ctx, mongo.Pipeline{matchStage})
 	helper.PanicIfError(err)
 
@@ -78,23 +67,6 @@ func (repository *AuthRepositoryImpl) LoginEmail(email string) (domain.User, err
 
 	return user, result.Err()
 }
-
-// func (repository *AuthRepositoryImpl) LoginPhone(phone string) (domain.User, error) {
-// 	ctx, cancel := config.NewDBContext()
-// 	defer cancel()
-
-// 	matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "phone", Value: phone}}}}
-// 	lookupStage := bson.D{{Key: "$lookup", Value: bson.D{{Key: "from", Value: "occupations"}, {Key: "localField", Value: "occupation_id"}, {Key: "foreignField", Value: "_id"}, {Key: "as", Value: "occupation"}}}}
-// 	unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$occupation"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
-// 	result, err := repository.Collection.Aggregate(ctx, mongo.Pipeline{matchStage, lookupStage, unwindStage})
-// 	helper.PanicIfError(err)
-
-// 	var user domain.User
-// 	result.Next(ctx)
-// 	result.Decode(&user)
-
-// 	return user, result.Err()
-// }
 
 func (repository *AuthRepositoryImpl) FindByQuery(query, value string) (domain.User, error) {
 	ctx, cancel := config.NewDBContext()

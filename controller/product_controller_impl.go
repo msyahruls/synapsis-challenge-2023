@@ -47,20 +47,9 @@ func (controller *ProductControllerImpl) NewProductRouter(app *fiber.App) {
 }
 
 func (controller *ProductControllerImpl) Create(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can create product")
-	// }
-
 	var request web.ProductCreateRequest
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)
-
-	// request.CategoryID = ctx.FormValue("category_id")
-	// request.Name = ctx.FormValue("name")
-	// qty, _ := strconv.Atoi(ctx.FormValue("qty"))
-	// request.Qty = qty
-	// price, _ := strconv.Atoi(ctx.FormValue("price"))
-	// request.Price = price
 
 	productResponse := controller.ProductService.Create(request)
 
@@ -101,10 +90,6 @@ func (controller *ProductControllerImpl) FindAll(ctx *fiber.Ctx) error {
 }
 
 func (controller *ProductControllerImpl) Update(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can update product")
-	// }
-
 	var request web.ProductUpdateRequest
 	err := ctx.BodyParser(&request)
 	helper.PanicIfError(err)
@@ -126,10 +111,6 @@ func (controller *ProductControllerImpl) Update(ctx *fiber.Ctx) error {
 }
 
 func (controller *ProductControllerImpl) Delete(ctx *fiber.Ctx) error {
-	// if isAdmin := middlewares.IsAdmin(ctx); !isAdmin {
-	// 	return UnauthorizeReturn(ctx, "only admin can delete product")
-	// }
-
 	productId := ctx.Params("productId")
 
 	controller.ProductService.Delete(productId)
