@@ -9,6 +9,9 @@
   * [Database Implementation](#database-implementation)
   * [RESTful API](#restful-api)
 * [Deployment](#Link)
+  * [Dockerfile](#commit-message)
+  * [Docker compose files](#database-implementation)
+  * [Deploy on heroku](#restful-api)
 # System Design
 ## README Documentation
 This is a documentation for Synapsis Challenge
@@ -29,3 +32,24 @@ Features that are available:
 * Customer can delete product list in shopping cart
 * Customers can checkout and make payment transactions
 * Login and register customers
+# Deployment
+## Dockerfile
+Dockerfile available at https://github.com/msyahruls/synapsis-challenge-2023/blob/main/Dockerfile
+## Docker compose (broken)
+Docker compose available at https://github.com/msyahruls/synapsis-challenge-2023/blob/main/docker-compose.yml
+
+Docker Container Registry available at https://hub.docker.com/r/msyahruls/synapsis-challenge
+
+> Docker Composer is still broken because the app images won't connect properly to the database
+
+![Docker compose broken](https://i.ibb.co/JCR41TP/Screenshot-2023-09-26-at-07-43-42.png)
+
+or https://ibb.co/52Wy03V
+## Deploy on heroku (broken)
+Deploy on heroku available at https://synapsis-challenge-223bccf345c8.herokuapp.com/
+
+> Deploy on heroku is still broken because the docker won't run properly
+
+![Deploy on heroku broken](https://i.ibb.co/rt1L2bn/Screenshot-2023-09-26-at-07-44-03.png)
+
+or https://ibb.co/yRbMFhL
